@@ -14,10 +14,9 @@ RUN wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | b
 RUN mkdir /root/workspace
 
 # Install etcd so that we can interact with etcd in host environment
-RUN curl -sL https://github.com/coreos/etcd/releases/download/v2.0.11/etcd-v2.0.11-linux-amd64.tar.gz -o /tmp/etcd-v2.0.11-linux-amd64.tar.gz
-RUN cd /tmp && gzip -dc etcd-v2.0.11-linux-amd64.tar.gz | tar -xof -
-RUN cp -f /tmp/etcd-v2.0.11-linux-amd64/etcdctl /usr/local/bin
-RUN rm -rf /tmp/etcd-v2.0.11-linux-amd64.tar.gz
+ENV ETCD_VERSION=v2.0.13
+ADD https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz /tmp/etcd.tar.gz
+RUN tar -xvzf /tmp/etcd.tar.gz -C /usr/local/bin --strip-components=1 etcd-${ETCD_VERSION}-linux-amd64/etcdctl
 
 # Add in ssh keys and c9 public key
 RUN mkdir ~/.ssh
