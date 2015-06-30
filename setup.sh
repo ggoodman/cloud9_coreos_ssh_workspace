@@ -3,7 +3,7 @@
 echo "Setting up Cloud9IDE ssh workspace in CoreOS"
 
 if [ ! -f id_rsa.pub ]; then
-	echo -n "Enter the email address to use in generating your ssh key and press [ENTER]" "
+	echo -n "Enter the email address to use in generating your ssh key and press [ENTER]"
 	read email
 
 	ssh-keygen -t rsa -b 4096 -C "$email" -f ./id_rsa -N ''

@@ -14,16 +14,18 @@ RUN wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | b
 RUN mkdir /root/workspace
 
 # Install etcd so that we can interact with etcd in host environment
-RUN curl -L https://github.com/coreos/etcd/releases/download/v0.4.5/etcd-v0.4.5-linux-amd64.tar.gz -o /tmp/etcd-v0.4.5-linux-amd64.tar.gz
-RUN cd /tmp && gzip -dc etcd-v0.4.5-linux-amd64.tar.gz | tar -xof -
-RUN cp -f /tmp/etcd-v0.4.5-linux-amd64/etcdctl /usr/local/bin
-RUN rm -rf /tmp/etcd-v0.4.5-linux-amd64.tar.gz
+RUN curl -sL https://github.com/coreos/etcd/releases/download/v2.0.11/etcd-v2.0.11-linux-amd64.tar.gz -o /tmp/etcd-v2.0.11-linux-amd64.tar.gz
+RUN cd /tmp && gzip -dc etcd-v2.0.11-linux-amd64.tar.gz | tar -xof -
+RUN cp -f /tmp/etcd-v2.0.11-linux-amd64/etcdctl /usr/local/bin
+RUN rm -rf /tmp/etcd-v2.0.11-linux-amd64.tar.gz
 
 # Add in ssh keys and c9 public key
 RUN mkdir ~/.ssh
 ADD authorized_keys /root/.ssh/authorized_keys
 ADD id_rsa /root/.ssh/id_rsa
 ADD id_rsa.pub /root/.ssh/id_rsa.pub
+
+EXPOSE 2222
 
 # Expose some environment variables from the host in the container
 CMD env | grep HOST >> /etc/environment && env | grep PROXY_IMAGE >> /etc/environment && echo PORT=8721 >> /etc/environment && /usr/sbin/sshd -D -p 2222
