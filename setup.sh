@@ -17,10 +17,6 @@ if [ ! -f ssh_host_dsa_key ]; then
 	ssh-keygen -t dsa -f ./ssh_host_dsa_key -N ''
 fi
 
-if [ ! -f ssh_host_ecdsa_key ]; then
-	ssh-keygen -t ecdsa -f ./ssh_host_ecdsa_key -N ''
-fi
-
 if [ ! -f authorized_keys ]; then
 	echo -n "Copy and paste the public key provided by Cloud9IDE's ssh workspace setup modal and press [ENTER] "
 	read authkey
