@@ -6,17 +6,13 @@ ENV UID=500
 # Needed to run sshd and to build cloud9ide runtime
 RUN \
   apt-get update && \
-  apt-get install -y build-essential openssh-server
+  apt-get install -y build-essential openssh-server && \
+  mkdir -p /var/run/sshd
 
-# Create a new user
+# Create the cloud9 user with same uid:gid as host user
 RUN \
     groupadd -g $GID cloud9 && \
     useradd -g $GID -u $UID -d /home/cloud9 -m -G sudo -s /bin/bash cloud9
-
-# Install cloud9ide runtime
-RUN \
-    mkdir /var/run/sshd && \
-    wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | bash && \
     
 
 # Install etcd so that we can interact with etcd in host environment
@@ -38,6 +34,10 @@ VOLUME /home/cloud9/workspace
 USER cloud9
 
 WORKDIR /home/cloud9
+
+# Install cloud9ide runtime
+RUN \
+    wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | bash && \
 
 # Add in ssh keys and c9 public key
 RUN mkdir ~/.ssh
