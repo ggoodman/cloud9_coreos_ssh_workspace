@@ -37,7 +37,7 @@ WORKDIR /home/cloud9
 
 # Install cloud9ide runtime
 RUN \
-    wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | bash && \
+    wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | bash
 
 # Add in ssh keys and c9 public key
 RUN mkdir ~/.ssh
