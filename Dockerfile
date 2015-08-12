@@ -50,5 +50,5 @@ ADD sshd_config /home/cloud9/.ssh/sshd_config
 EXPOSE 2222
 
 # Run the sshd server
-CMD /usr/sbin/sshd -f /home/cloud9/sshd_config -D
+CMD /usr/sbin/sshd -f /home/cloud9/.ssh/sshd_config -D
 
