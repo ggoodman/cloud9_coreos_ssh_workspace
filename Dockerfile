@@ -11,7 +11,7 @@ RUN \
 # Create a new user
 RUN \
     groupadd -g $GID cloud9 && \
-    useradd -g $GID -u $UID -b /home/core -m -G sudoers -s /bin/bash
+    useradd -g $GID -u $UID -b /home/core -m -G sudo -s /bin/bash
 
 # Install cloud9ide runtime
 RUN \
