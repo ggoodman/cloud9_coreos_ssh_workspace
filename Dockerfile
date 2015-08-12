@@ -41,9 +41,11 @@ RUN \
 
 # Add in ssh keys and c9 public key
 RUN mkdir ~/.ssh
-ADD authorized_keys /root/.ssh/authorized_keys
-ADD id_rsa /root/.ssh/id_rsa
-ADD id_rsa.pub /root/.ssh/id_rsa.pub
+ADD authorized_keys ~/.ssh/authorized_keys
+ADD id_rsa ~/.ssh/id_rsa
+ADD id_rsa.pub ~/.ssh/id_rsa.pub
+
+USER root
 
 EXPOSE 2222
 
