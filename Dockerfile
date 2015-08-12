@@ -46,6 +46,11 @@ ADD id_rsa* /home/cloud9/.ssh/
 ADD ssh_host_* /home/cloud9/.ssh/
 ADD sshd_config /home/cloud9/.ssh/sshd_config
 
+RUN \
+    chown -R cloud9:cloud9 /home/cloud9 && \
+    chmod 600 ~/.ssh/id_rsa && \
+    chmod 600 ~/.ssh/ssh_host_*
+
 EXPOSE 2222
 
 # Run the sshd server

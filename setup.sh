@@ -31,4 +31,4 @@ fi
 
 mkdir -p ~/workspace
 
-docker build -t cloud9ide .
+docker build --rm -t cloud9ide .
