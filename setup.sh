@@ -16,4 +16,6 @@ if [ ! -f c9_rsa.pub ]; then
 	echo $authkey >> ./authorized_keys
 fi
 
+mkdir -p ~/workspace
+
 docker build -t cloud9ide .

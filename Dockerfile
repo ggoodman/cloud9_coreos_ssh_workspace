@@ -1,22 +1,43 @@
 FROM node:0.12.2
 
+ENV GID=500
+ENV UID=500
+
 # Needed to run sshd and to build cloud9ide runtime
 RUN \
   apt-get update && \
   apt-get install -y build-essential openssh-server
 
-RUN mkdir /var/run/sshd
+# Create a new user
+RUN \
+    groupadd -g $GID cloud9 && \
+    useradd -g $GID -u $UID -b /home/core -m -G sudoers -s /bin/bash
 
 # Install cloud9ide runtime
-RUN wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | bash
-
-# Create our working directory
-RUN mkdir /root/workspace
+RUN \
+    mkdir /var/run/sshd && \
+    wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | bash && \
+    
 
 # Install etcd so that we can interact with etcd in host environment
 ENV ETCD_VERSION=v2.0.13
-ADD https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz /tmp/etcd.tar.gz
-RUN tar -xvzf /tmp/etcd.tar.gz -C /usr/local/bin --strip-components=1 etcd-${ETCD_VERSION}-linux-amd64/etcdctl
+ADD https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz /tmp/etcdctl.tar.gz
+RUN \
+    tar -xvzf /tmp/etcdctl.tar.gz -C /usr/local/bin --strip-components=1 etcd-${ETCD_VERSION}-linux-amd64/etcdctl && \
+    rm -rf /tmp/etcdctl.tar.gz
+
+ENV FLEET_VERSION=v0.10.2
+ADD https://github.com/coreos/fleet/releases/download/${FLEET_VERSION}/fleet-${FLEET_VERSION}-linux-amd64.tar.gz /tmp/fleetctl.tar.gz
+RUN \
+    tar -xvzf /tmp/fleetctl.tar.gz -C /usr/local/bin --strip-components=1 fleet-${FLEET_VERSION}-linux-amd64/fleetctl && \
+    rm -rf /tmp/fleetctl.tar.gz
+
+# Create our working directory
+VOLUME /home/cloud9/workspace
+
+USER cloud9
+
+WORKDIR /home/cloud9
 
 # Add in ssh keys and c9 public key
 RUN mkdir ~/.ssh
@@ -26,6 +47,6 @@ ADD id_rsa.pub /root/.ssh/id_rsa.pub
 
 EXPOSE 2222
 
-# Expose some environment variables from the host in the container
-CMD env | grep HOST >> /etc/environment && env | grep PROXY_IMAGE >> /etc/environment && echo PORT=8721 >> /etc/environment && /usr/sbin/sshd -D -p 2222
+# Run the sshd server
+CMD /usr/sbin/sshd -D -p 2222
 
