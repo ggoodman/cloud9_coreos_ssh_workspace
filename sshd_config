@@ -1,6 +1,6 @@
 Port 2222
 Protocol 2
-HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /home/cloud9/.ssh/ssh_host_rsa_key
 UsePrivilegeSeparation no
 
 # Lifetime and size of ephemeral version 1 server key
