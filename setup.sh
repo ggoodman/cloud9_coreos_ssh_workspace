@@ -9,8 +9,16 @@ if [ ! -f id_rsa.pub ]; then
 	ssh-keygen -t rsa -b 4096 -C "$email" -f ./id_rsa -N ''
 fi
 
-if [ ! -f ssh_host_rsa_key ]; then
-	ssh-keygen -t rsa -f ./ssh_host_rsa_key -N ''
+if [ ! -f ssh_host_dsa_key ]; then
+	ssh-keygen -t dsa -f ./ssh_host_dsa_key -N ''
+fi
+
+if [ ! -f ssh_host_dsa_key ]; then
+	ssh-keygen -t dsa -f ./ssh_host_dsa_key -N ''
+fi
+
+if [ ! -f ssh_host_ecdsa_key ]; then
+	ssh-keygen -t ecdsa -f ./ssh_host_ecdsa_key -N ''
 fi
 
 if [ ! -f authorized_keys ]; then

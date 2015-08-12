@@ -44,7 +44,9 @@ RUN mkdir -p /home/cloud9/.ssh
 ADD authorized_keys /home/cloud9/.ssh/authorized_keys
 ADD id_rsa /home/cloud9/.ssh/id_rsa
 ADD id_rsa.pub /home/cloud9/.ssh/id_rsa.pub
+ADD ssh_host_dsa_key /home/cloud9/.ssh/ssh_host_dsa_key
 ADD ssh_host_rsa_key /home/cloud9/.ssh/ssh_host_rsa_key
+ADD ssh_host_ecdsa_key /home/cloud9/.ssh/ssh_host_ecdsa_key
 ADD sshd_config /home/cloud9/.ssh/sshd_config
 
 EXPOSE 2222
