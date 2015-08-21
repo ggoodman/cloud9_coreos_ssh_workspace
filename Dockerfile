@@ -1,7 +1,8 @@
-FROM node:0.12.2
+FROM node
 
 ENV GID=500
 ENV UID=500
+ENV NODE_VERSION=0.12
 
 # Needed to run sshd and to build cloud9ide runtime
 RUN \
@@ -31,9 +32,16 @@ USER core
 
 WORKDIR /home/core
 
+# Install nodejs using nvm
+RUN \
+    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.26.0/install.sh | bash
+
+RUN \
+    bash -c '. ~/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm use $NODE_VERSION && nvm alias default $(nvm version $NODE_VERSION)'
+
 # Install cloud9ide runtime
 RUN \
-    wget -O - https://raw.githubusercontent.com/c9/install/master/install.sh | bash
+    wget -O- https://raw.githubusercontent.com/c9/install/master/install.sh | bash
 
 EXPOSE 2222
 VOLUME /home/core/workspace

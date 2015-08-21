@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eux
+set -ux
 
 echo "Setting up Cloud9IDE ssh workspace in CoreOS"
 
@@ -14,7 +14,7 @@ if [ ! -f ./.ssh/id_rsa.pub ]; then
 	echo
 	echo "Adding the public key just generated to your Github profile..."
 	
-	read -e -p "Enter the name that will identify this public key on Github and press [ENTER]: " -i "Cloud9@$HOST" GH_KEY_TITLE
+	read -e -p "Enter the name that will identify this public key on Github and press [ENTER]: " -i "Cloud9@$(hostname)" GH_KEY_TITLE
 	read -e -p "Enter your github username and press [ENTER]: " GH_USER
 	read -e -s -p "Enter your github password and press [ENTER]: " GH_PASS
 	
@@ -41,4 +41,4 @@ fi
 
 mkdir -p ~/workspace
 
-docker build --rm -t c9 .
+docker build --rm -t c9 $@ .

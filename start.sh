@@ -1,4 +1,4 @@
 #!/bin/sh
 
 
-docker run -d --net=host -v $HOME:/home/core/workspace -v $(pwd)/.ssh:/home/core/.ssh -e GID=$(id -g) -e UID=$(id -u) --name=c9 c9
+docker run -d --net=host -v /var/run/fleet.sock:/var/run/fleet.sock -v $HOME/workspace:/home/core/workspace -v $(pwd)/.ssh:/home/core/.ssh -e GID=$(id -g) -e UID=$(id -u) --name=c9 c9
