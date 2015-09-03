@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ux
+set -eu
 
 echo "Setting up Cloud9IDE ssh workspace in CoreOS"
 
@@ -17,13 +17,23 @@ if [ ! -f ./add/.ssh/id_rsa.pub ]; then
 	read -e -p "Enter the name that will identify this public key on Github and press [ENTER]: " -i "Cloud9@$(hostname)" GH_KEY_TITLE
 	read -e -p "Enter your github username and press [ENTER]: " GH_USER
 	read -e -s -p "Enter your github password and press [ENTER]: " GH_PASS
+	read -e -p "Enter your github two-factor authentication code (if using) and press [ENTER]: " GH_2FA
 	
-	curl -XPOST -u $GH_USER:$GH_PASS -H "Content-Type: application/json" --data-binary @- https://api.github.com/user/keys <<EOF
+	if [ -z $GH_2FA]; then
+		 curl -XPOST -u $GH_USER:$GH_PASS -H "Content-Type: application/json" --data-binary @- https://api.github.com/user/keys <<EOF
 {
 	"title": "$GH_KEY_TITLE",
 	"key":"$(cat ./add/.ssh/id_rsa.pub)"
 }
 EOF
+	else
+                 curl -XPOST -u $GH_USER -H "Content-Type: application/json" -H "X-GitHub-OTP: $GH_2FA" --data-binary @- https://api.github.com/user/keys <<EOF
+{
+        "title": "$GH_KEY_TITLE",
+        "key":"$(cat ./add/.ssh/id_rsa.pub)"
+}
+EOF
+	fi
 
 fi
 
@@ -40,7 +50,7 @@ if [ ! -f ./add/.ssh/authorized_keys ]; then
 fi
 
 if [ ! -f ./add/.gitconfig ]; then
-	read -e -p "Enter your git email address and press [ENTER] " GIT_EMAIL
+	read -e -p "Enter your git email address and press [ENTER] " -i ${EMAIL:-''} GIT_EMAIL
 	read -e -p "Enter your git name and press [ENTER] " GIT_NAME
 	
 	tee ./add/.gitconfig <<EOF
@@ -48,6 +58,8 @@ if [ ! -f ./add/.gitconfig ]; then
 	email = $GIT_EMAIL
 	name = $GIT_NAME
 EOF
+
+fi
 
 mkdir -p ~/workspace
 

@@ -1,6 +1,8 @@
 .git
 .ssh
 
+add
+
 authorized_keys
 id_rsa
 id_rsa.pub
