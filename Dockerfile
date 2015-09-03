@@ -43,6 +43,8 @@ RUN \
 RUN \
     wget -O- https://raw.githubusercontent.com/c9/install/master/install.sh | bash
 
+ADD add/.gitconfig /home/core/.gitconfig
+
 EXPOSE 2222
 VOLUME /home/core/workspace
 
